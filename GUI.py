@@ -15,7 +15,6 @@ window = Tk()
 b1 = Button(window, text = "Open File", command = get_file_path).pack()
 
 def submit():
-    
     bg.background(file_path)
 
 b2 = Button(window, text= "Submit", command= submit).pack()
