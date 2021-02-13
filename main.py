@@ -1,5 +1,6 @@
 #%%
-def background(paths):
+def background(l1):
+
     import re
     import nltk
     import cv2
@@ -14,31 +15,12 @@ def background(paths):
     from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
     from textblob import TextBlob
     from openpyxl import Workbook
-    import tkinter as tk
-    #import GUI
-    #import PySimpleGUI as sg 
 
-
-    # this is the GUI code
-    '''import tkinter as tk
-    from tkinter import filedialog
-    from PIL import Image, ImageTk
-
-    root = tk.Tk()
-    def UploadAction(event=None):
-        img = filedialog.askopenfilename()
-        print('Selected:', img)
-    button = tk.Button(root, text='Open', command=UploadAction)
-    button.pack()
-    #import main as bg
-    # #runprogram1= bg.image(img)
-    root.mainloop()'''
-    #GUI end
-        
-    img = cv2.imread(paths)
+    img = cv2.imread(l1)
+    #img = cv2.imread('/home/tanmay/Desktop/img1.png')
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        
 
-        #%%
     def get_grayscale(image):
         return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -57,8 +39,7 @@ def background(paths):
     print(pytesseract.image_to_string(img))
 
 
-    #"""
-
+    
     def text_processing(tweet):
             
         def form_sentence(tweet):
@@ -83,7 +64,7 @@ def background(paths):
             return normalized_tweet
         return normalization(no_punc_tweet)
             
-        #"""
+        
     var=text_processing(pytesseract.image_to_string(img))
 
     nltk.download('punkt')
@@ -91,7 +72,6 @@ def background(paths):
     nltk.download('wordnet')
 
 
-        # %%
     workbook=Workbook()
     sheet= workbook.active
     sheet["A1"]="WORDS"

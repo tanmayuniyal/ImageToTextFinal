@@ -131,11 +131,17 @@ def get_file_path():
     l1 = Label(window, text = "File path: " + file_path).pack()
     return l1
 
+
 window = Tk()
 # Creating a button to search the file
 b1 = Button(window, text = "Open File", command = get_file_path).pack()
-b2 = Button(window, text= "Submit", command= bg.background(b1)).pack()
-#bg.background()
+
+def submit():
+    img1=b1
+    bg.background(img1)
+
+b2 = Button(window, text= "Submit", command= submit).pack()
+
 
 window.mainloop()
 
