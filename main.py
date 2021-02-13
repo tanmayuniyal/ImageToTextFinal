@@ -1,5 +1,5 @@
 #%%
-def background(l1):
+def background():
 
     import re
     import nltk
@@ -16,7 +16,7 @@ def background(l1):
     from textblob import TextBlob
     from openpyxl import Workbook
 
-    img = cv2.imread(l1)
+    img = cv2.imread(file_path)
     #img = cv2.imread('/home/tanmay/Desktop/img1.png')
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         
