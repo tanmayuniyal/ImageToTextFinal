@@ -15,6 +15,8 @@ def background(file_path):
     from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
     from textblob import TextBlob
     from openpyxl import Workbook
+    from nltk.corpus import wordnet
+
 
     img = cv2.imread(file_path)
     #img = cv2.imread('/home/tanmay/Desktop/img1.png')
@@ -71,16 +73,18 @@ def background(file_path):
     nltk.download('stopwords')
     nltk.download('wordnet')
 
-
-    workbook=Workbook()
+    workbook = Workbook()
     sheet= workbook.active
-    sheet["A1"]="WORDS"
-    sheet["B1"]="HINDI"
-    sheet["C1"]="TAMIL"
-    sheet["D1"]="TELUGU"
-    sheet["E1"]="PUNJABI"
+    sheet["A1"] = "WORDS"
+    sheet["B1"] = "SYNONYMS"
+    sheet["C1"] = "ANTONYMS"
+    sheet["D1"] = "HINDI"
+    sheet["E1"] = "PUNJABI"
+    sheet["F1"] = "TAMIL"
+    sheet["G1"] = "TELUGU"
 
-    workbook.save(filename="TransText.xlsx")
+    workbook.save(filename="translate.xlsx")
+
     lwords=[]
     j=2
     for i in range(len(var)):
@@ -88,35 +92,68 @@ def background(file_path):
         s="A"+str(j)
         sheet[s]=var[i]
         j=j+1
-        workbook.save(filename="TransText.xlsx")
+        workbook.save(filename="translate.xlsx")
     j=2
-    from google_trans_new import google_translator
+
+
+    synonyms = []
+    antonyms = []
+    js=2
+    for i in lwords:
+        synonyms=[]
+        for syn in wordnet.synsets(i):
+            for lm in syn.lemmas():
+                synonyms.append(lm.name())#adding into synonyms
+        if len(synonyms)>0:
+            s="B"+str(js)
+            sheet[s]=synonyms[0]
+            workbook.save(filename="translate.xlsx")
+        js=js+1
+    js=2
+    for i in lwords:
+        antonyms=[]
+        for syn in wordnet.synsets(i):
+            for lm in syn.lemmas():
+                if lm.antonyms():
+                    antonyms.append(lm.antonyms()[0].name()) #adding into antonyms
+        if len(antonyms)>0:
+            s="C"+str(js)
+            sheet[s]=antonyms[0]
+            workbook.save(filename="translate.xlsx")
+        js=js+1
+    js=2
+
+
+    
+
+
+    from google_trans_new import google_translator  
     ltranswordshindi=[]
+    ltranswordspunjabi=[]
     ltranswordstamil=[]
     ltranswordstelugu=[]
-    ltranswordspunjabi=[]
-    translator=google_translator()
+    translator = google_translator()  
     for i in var:
-        translate_text=translator.translate(i,lang_tgt="hi")    
+        translate_text = translator.translate(i,lang_tgt='hi')  
         ltranswordshindi.append(translate_text)
-        translate_text=translator.translate(i,lang_tgt="pa")    
-        ltranswordspunjabi.append(translate_text)  
-        translate_text=translator.translate(i,lang_tgt="ta")    
-        ltranswordstamil.append(translate_text)  
-        translate_text=translator.translate(i,lang_tgt="te")    
-        ltranswordstelugu.append(translate_text)  
-            
-    dictwords={}
+        translate_text = translator.translate(i,lang_tgt='ta')
+        ltranswordstamil.append(translate_text)
+        translate_text = translator.translate(i,lang_tgt='te')
+        ltranswordstelugu.append(translate_text)
+        translate_text = translator.translate(i,lang_tgt='pa')
+        ltranswordspunjabi.append(translate_text)
+
     j=2
     for i in range(len(lwords)):
-        shindi="B"+str(j)
-        spu="C"+str(j)
-        ste="D"+str(j)
-        sta="E"+str(j)
+        shindi="D"+str(j)
+        spu="E"+str(j)
+        sta="F"+str(j)
+        ste="G"+str(j)
         sheet[shindi]=ltranswordshindi[i]
         sheet[spu]=ltranswordspunjabi[i]
-        sheet[ste]=ltranswordstamil[i]
-        sheet[sta]=ltranswordstelugu[i]
+        sheet[sta]=ltranswordstamil[i]
+        sheet[ste]=ltranswordstelugu[i]
         j=j+1
-        workbook.save(filename="TransText.xlsx")
+        workbook.save(filename="translate.xlsx")
     j=2
+
