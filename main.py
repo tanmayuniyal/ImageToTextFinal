@@ -8,6 +8,7 @@ def background(filepath):
     from matplotlib import pyplot as plt
     import numpy as np
     import re
+    import openpyxl 
     import nltk
     import seaborn as sns
     from sklearn.linear_model import LogisticRegression
@@ -65,10 +66,27 @@ def background(filepath):
    
     var1=text_processing(pytesseract.image_to_string(img))
     print(var1)
-    var=[]
+    var2=[]
     for i in var1:
-        if i not in var:
-            var.append(i)
+        if i not in var2:
+            var2.append(i)
+    var2
+    path = "C:/Users/TANYA/Desktop/complexwords.xlsx"
+    wb_obj = openpyxl.load_workbook(path) 
+    sheet= wb_obj.active  
+    
+    var=[]
+    
+    for row in sheet.iter_cols(min_row=1, min_col=1, max_row=114, max_col=2):
+        for cell in row:
+            ww=cell.value
+            for i in range(len(var2)):
+                sst=var2[i].lower()
+                if ww==sst:
+                    var.append(var2[i])
+        
+    
+    
             
         
     workbook = Workbook()
@@ -84,12 +102,13 @@ def background(filepath):
     workbook.save(filename="translate.xlsx")
     lwords=[]
     j=2
-    for i in var:
-        lwords.append(i)
+    for i in range(len(var)):
+        lwords.append(var[i])
         s="A"+str(j)
-        sheet[s]=i
+        sheet[s]=var[i]
         j=j+1
         workbook.save(filename="translate.xlsx")
+    
     j=2
     synonyms = []
     antonyms = []
@@ -150,3 +169,9 @@ def background(filepath):
         j=j+1
         workbook.save(filename="translate.xlsx")
     j=2
+
+  
+    
+    
+
+
